@@ -30,7 +30,7 @@ body {
 }
 
 .banner {
-    height: 100px;
+    height: 90px;
     background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
     position: relative;
     background-size: cover;
