@@ -1,11 +1,13 @@
 // Fetch employee data from employees.json
 async function getEmployeeData() {
   const params = new URLSearchParams(window.location.search);
-  const employeeId = params.get('id') || 'samantha'; // default
+  const token = params.get('id'); // Now expects a token
   
   const response = await fetch('employees.json');
   const employees = await response.json();
-  const emp = employees.find(e => e.id === employeeId);
+  
+  // Find employee by token instead of id
+  const emp = employees.find(e => e.token === token);
   return emp;
 }
 
