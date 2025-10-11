@@ -47,12 +47,14 @@ EMAIL:${emp.email}
 TEL:${emp.phone}
 URL:${emp.website}
 ADR:;;${emp.location};;;;`;
-if (vcardData.linkedin) {
-    vCard += `\nitem1.URL;type=pref:${vcardData.linkedin}`;
+
+  // Add personal LinkedIn if exists
+  if (emp.personalLinkedIn) {
+    vCard += `\nitem1.URL;type=pref:${emp.personalLinkedIn}`;
     vCard += `\nitem1.X-ABLabel:LinkedIn`;
-}
+  }
 
-
+  // Add photo as base64
   const photoBase64 = await imageUrlToBase64(emp.photo);
   if (photoBase64) {
     vCard += `\nPHOTO;ENCODING=b;TYPE=JPEG:${photoBase64}`;
