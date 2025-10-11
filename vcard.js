@@ -7,7 +7,9 @@ const vcardData = {
     email: 'samantha@pollisum.com',
     phone: '+65 91377584',
     website: 'https://pollisum.com',
-    address: 'Singapore',
+    address: '41 Senoko Way, Singapore 758053',
+    // Google Maps URL for location
+    mapsUrl: 'https://www.google.com/maps/place/Pollisum+Engineering+Pte+Ltd/@1.4697222,103.8085362,17z/',
     // Profile picture URL (optional - leave empty string if no photo)
     // Upload your image to GitHub and use the raw URL
     photoUrl: 'https://raw.githubusercontent.com/doudouey-svg/PollisumDigitalCard/main/assets/Samantha.jpeg',
@@ -30,6 +32,11 @@ ADR:;;${vcardData.address};;;;`;
     // Add photo URL if provided
     if (vcardData.photoUrl) {
         vCard += `\nPHOTO;VALUE=URL;TYPE=JPEG:${vcardData.photoUrl}`;
+    }
+
+    // Add Google Maps URL if provided
+    if (vcardData.mapsUrl) {
+        vCard += `\nURL;TYPE=LOCATION:${vcardData.mapsUrl}`;
     }
 
     vCard += `\nEND:VCARD`;
