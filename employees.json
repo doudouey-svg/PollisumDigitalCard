@@ -8,7 +8,7 @@
     "website": "https://pollisum.com",
     "location": "41 Senoko Way, Singapore 758053",
     "photo": "assets/Samantha.jpeg",
-    "personalLinkedIn": "https://www.linkedin.com/in/samantha-lee-438a031b9/",
+    "personalLinkedIn": "https://www.linkedin.com/in/samanthalee",
     "linkedin": "https://www.linkedin.com/company/pollisum-engineering-pte-ltd",
     "facebook": "https://www.facebook.com/Pollisum/",
     "instagram": "https://www.instagram.com/pollisumgroup/"
@@ -22,51 +22,9 @@
     "website": "https://pollisum.com",
     "location": "41 Senoko Way, Singapore 758053",
     "photo": "assets/cannie_1.JPG",
-    "personalLinkedIn": "https://www.linkedin.com/in/cannie-lau-a7914762/",
+    "personalLinkedIn": "",
     "linkedin": "https://www.linkedin.com/company/pollisum-engineering-pte-ltd",
     "facebook": "https://www.facebook.com/Pollisum/",
     "instagram": "https://www.instagram.com/pollisumgroup/"
-  },
-  {
-    "id": "alice",
-    "name": "Alice Wong",
-    "title": "HR Executive",
-    "email": "alice@pollisum.com",
-    "phone": "+65 91234567",
-    "website": "https://pollisum.com",
-    "location": "41 Senoko Way, Singapore 758053",
-    "photo": "assets/Alice.jpeg",
-    "personalLinkedIn": "",
-    "linkedin": "",
-    "facebook": "",
-    "instagram": ""
-  },
-  {
-    "id": "michael",
-    "name": "Michael Lim",
-    "title": "Project Engineer",
-    "email": "michael@pollisum.com",
-    "phone": "+65 99887766",
-    "website": "https://pollisum.com",
-    "location": "41 Senoko Way, Singapore 758053",
-    "photo": "assets/Michael.jpeg",
-    "personalLinkedIn": "https://www.linkedin.com/in/michaellim",
-    "linkedin": "",
-    "facebook": "",
-    "instagram": ""
-  },
-  {
-    "id": "sarah",
-    "name": "Sarah Ng",
-    "title": "Finance Executive",
-    "email": "sarah@pollisum.com",
-    "phone": "+65 94561234",
-    "website": "https://pollisum.com",
-    "location": "41 Senoko Way, Singapore 758053",
-    "photo": "assets/Sarah.jpeg",
-    "personalLinkedIn": "",
-    "linkedin": "",
-    "facebook": "",
-    "instagram": ""
   }
 ]
