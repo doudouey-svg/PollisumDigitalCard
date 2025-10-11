@@ -33,6 +33,9 @@ body {
     height: 150px;
     background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
     position: relative;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
 }
 
 .profile-section {
@@ -49,12 +52,8 @@ body {
     border: 5px solid white;
     margin: 0 auto;
     background: white;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 48px;
-    color: #ef4444;
-    font-weight: bold;
+    display: block;
+    object-fit: cover;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
 }
 
