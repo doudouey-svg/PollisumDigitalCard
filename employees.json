@@ -1,0 +1,67 @@
+[
+  {
+    "id": "samantha",
+    "name": "Samantha Lee",
+    "title": "Technology Development Manager",
+    "email": "samantha@pollisum.com",
+    "phone": "+65 91377584",
+    "website": "https://pollisum.com",
+    "location": "41 Senoko Way, Singapore 758053",
+    "photo": "assets/Samantha.jpeg",
+    "linkedin": "https://www.linkedin.com/company/pollisum-engineering-pte-ltd",
+    "facebook": "https://www.facebook.com/Pollisum/",
+    "instagram": "https://www.instagram.com/pollisumgroup/"
+  },
+  {
+    "id": "john",
+    "name": "John Tan",
+    "title": "Operations Manager",
+    "email": "john@pollisum.com",
+    "phone": "+65 98765432",
+    "website": "https://pollisum.com",
+    "location": "41 Senoko Way, Singapore 758053",
+    "photo": "assets/John.jpeg",
+    "linkedin": "",
+    "facebook": "",
+    "instagram": ""
+  },
+  {
+    "id": "alice",
+    "name": "Alice Wong",
+    "title": "HR Executive",
+    "email": "alice@pollisum.com",
+    "phone": "+65 91234567",
+    "website": "https://pollisum.com",
+    "location": "41 Senoko Way, Singapore 758053",
+    "photo": "assets/Alice.jpeg",
+    "linkedin": "",
+    "facebook": "",
+    "instagram": ""
+  },
+  {
+    "id": "michael",
+    "name": "Michael Lim",
+    "title": "Project Engineer",
+    "email": "michael@pollisum.com",
+    "phone": "+65 99887766",
+    "website": "https://pollisum.com",
+    "location": "41 Senoko Way, Singapore 758053",
+    "photo": "assets/Michael.jpeg",
+    "linkedin": "",
+    "facebook": "",
+    "instagram": ""
+  },
+  {
+    "id": "sarah",
+    "name": "Sarah Ng",
+    "title": "Finance Executive",
+    "email": "sarah@pollisum.com",
+    "phone": "+65 94561234",
+    "website": "https://pollisum.com",
+    "location": "41 Senoko Way, Singapore 758053",
+    "photo": "assets/Sarah.jpeg",
+    "linkedin": "",
+    "facebook": "",
+    "instagram": ""
+  }
+]
