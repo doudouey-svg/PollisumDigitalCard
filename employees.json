@@ -1,6 +1,7 @@
 [
   {
     "id": "samantha",
+    "token": "a7f3e9d2c1b8",
     "name": "Samantha Lee",
     "title": "Technology Development Manager",
     "email": "samantha@pollisum.com",
@@ -8,13 +9,14 @@
     "website": "https://pollisum.com",
     "location": "41 Senoko Way, Singapore 758053",
     "photo": "assets/Samantha.jpeg",
-    "personalLinkedIn": "https://www.linkedin.com/in/samanthalee",
+    "personalLinkedIn": "https://www.linkedin.com/in/samantha-lee-438a031b9/",
     "linkedin": "https://www.linkedin.com/company/pollisum-engineering-pte-ltd",
     "facebook": "https://www.facebook.com/Pollisum/",
     "instagram": "https://www.instagram.com/pollisumgroup/"
   },
   {
     "id": "cannie",
+    "token": "b9e4f7a1d6c3",
     "name": "Cannie Lau",
     "title": "Operations Manager",
     "email": "cannie@pollisum.com",
@@ -22,7 +24,7 @@
     "website": "https://pollisum.com",
     "location": "41 Senoko Way, Singapore 758053",
     "photo": "assets/cannie_1.JPG",
-    "personalLinkedIn": "",
+    "personalLinkedIn": "https://www.linkedin.com/in/cannie-lau-a7914762/",
     "linkedin": "https://www.linkedin.com/company/pollisum-engineering-pte-ltd",
     "facebook": "https://www.facebook.com/Pollisum/",
     "instagram": "https://www.instagram.com/pollisumgroup/"
