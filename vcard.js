@@ -7,7 +7,13 @@ const vcardData = {
     email: 'samantha@pollisum.com',
     phone: '+65 91377584',
     website: 'https://pollisum.com',
-    address: '41 Senoko Way, Singapore 758053',
+   address: 'Singapore',
+    // Full address details (optional - customize as needed)
+    streetAddress: '41 Senoko Way',
+    city: 'Singapore',
+    state: '',
+    postalCode: '758053',
+    country: 'Singapore',
     // Google Maps URL for location
     mapsUrl: 'https://www.google.com/maps/place/Pollisum+Engineering+Pte+Ltd/@1.4697222,103.8085362,17z/',
     // Profile picture URL (optional - leave empty string if no photo)
@@ -27,7 +33,7 @@ TITLE:${vcardData.title}
 EMAIL:${vcardData.email}
 TEL:${vcardData.phone}
 URL:${vcardData.website}
-ADR:;;${vcardData.address};;;;`;
+ADR;TYPE=WORK:;;${vcardData.streetAddress};${vcardData.city};${vcardData.state};${vcardData.postalCode};${vcardData.country}`;
 
     // Add photo URL if provided
     if (vcardData.photoUrl) {
