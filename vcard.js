@@ -1,23 +1,23 @@
-
 // vCard Configuration
 const vcardData = {
-    firstName: 'John',
-    lastName: 'Doe',
-    fullName: 'John Doe',
+    firstName: 'Samantha',
+    lastName: 'Lee',
+    fullName: 'Samantha Lee',
     title: 'Software Developer',
-    email: 'john.doe@email.com',
-    phone: '+1234567890',
-    website: 'https://johndoe.com',
+    email: 'samantha@pollisum.com',
+    phone: '+65 91377584',
+    website: 'https://pollisum.com',
     address: 'Singapore',
+    // Profile picture URL (optional - leave empty string if no photo)
+    // Upload your image to GitHub and use the raw URL
+    photoUrl: 'https://github.com/doudouey-svg/PollisumDigitalCard/blob/main/assets/Samantha.jpeg',
     // Social Media (optional)
-    linkedin: 'https://linkedin.com/in/johndoe',
-    github: 'https://github.com/johndoe',
-    twitter: 'https://twitter.com/johndoe'
+    linkedin: 'https://www.linkedin.com/company/pollisum-engineering-pte-ltd',
 };
 
 // Function to generate and download vCard
 function downloadVCard() {
-    const vCard = `BEGIN:VCARD
+    let vCard = `BEGIN:VCARD
 VERSION:3.0
 FN:${vcardData.fullName}
 N:${vcardData.lastName};${vcardData.firstName};;;
@@ -25,8 +25,14 @@ TITLE:${vcardData.title}
 EMAIL:${vcardData.email}
 TEL:${vcardData.phone}
 URL:${vcardData.website}
-ADR:;;${vcardData.address};;;;
-END:VCARD`;
+ADR:;;${vcardData.address};;;;`;
+
+    // Add photo URL if provided
+    if (vcardData.photoUrl) {
+        vCard += `\nPHOTO;VALUE=URL;TYPE=JPEG:${vcardData.photoUrl}`;
+    }
+
+    vCard += `\nEND:VCARD`;
 
     // Create blob and download
     const blob = new Blob([vCard], { type: 'text/vcard' });
