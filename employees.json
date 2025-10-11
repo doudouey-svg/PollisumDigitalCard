@@ -13,17 +13,17 @@
     "instagram": "https://www.instagram.com/pollisumgroup/"
   },
   {
-    "id": "john",
-    "name": "John Tan",
+    "id": "cannie",
+    "name": "Cannie Lau",
     "title": "Operations Manager",
-    "email": "john@pollisum.com",
-    "phone": "+65 98765432",
+    "email": "cannie@pollisum.com",
+    "phone": "+65 90933711",
     "website": "https://pollisum.com",
     "location": "41 Senoko Way, Singapore 758053",
-    "photo": "assets/John.jpeg",
-    "linkedin": "",
-    "facebook": "",
-    "instagram": ""
+    "photo": "assets/cannie_1.JPG",
+    "linkedin": "https://www.linkedin.com/company/pollisum-engineering-pte-ltd",
+    "facebook": "https://www.facebook.com/Pollisum/",
+    "instagram": "https://www.instagram.com/pollisumgroup/"
   },
   {
     "id": "alice",
