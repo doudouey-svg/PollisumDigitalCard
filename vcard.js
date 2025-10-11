@@ -43,10 +43,10 @@ VERSION:3.0
 FN:${emp.name}
 N:${emp.name.split(' ').slice(-1)[0]};${emp.name.split(' ')[0]};;;
 TITLE:${emp.title}
-EMAIL:${emp.email}
-TEL:${emp.phone}
-URL:${emp.website}
-ADR:;;${emp.location};;;;`;
+EMAIL;TYPE=WORK:${emp.email}
+TEL;TYPE=WORK,VOICE:${emp.phone}
+URL;TYPE=WORK:${emp.website}
+ADR;TYPE=WORK:;;${emp.location};;;;`;
 
   // Add personal LinkedIn if exists
   if (emp.personalLinkedIn) {
