@@ -7,7 +7,7 @@ const vcardData = {
     email: 'samantha@pollisum.com',
     phone: '+65 91377584',
     website: 'https://pollisum.com',
-   address: 'Singapore',
+    address: 'Singapore',
     // Full address details (optional - customize as needed)
     streetAddress: '41 Senoko Way',
     city: 'Singapore',
@@ -40,9 +40,9 @@ ADR;TYPE=WORK:;;${vcardData.streetAddress};${vcardData.city};${vcardData.state};
         vCard += `\nPHOTO;VALUE=URL;TYPE=JPEG:${vcardData.photoUrl}`;
     }
 
-    // Add Google Maps URL if provided
+    // Add Google Maps URL as a note with the address
     if (vcardData.mapsUrl) {
-        vCard += `\nURL;TYPE=LOCATION:${vcardData.mapsUrl}`;
+        vCard += `\nNOTE:Location: ${vcardData.mapsUrl}`;
     }
 
     vCard += `\nEND:VCARD`;
