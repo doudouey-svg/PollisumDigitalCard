@@ -47,6 +47,11 @@ EMAIL:${emp.email}
 TEL:${emp.phone}
 URL:${emp.website}
 ADR:;;${emp.location};;;;`;
+if (vcardData.linkedin) {
+    vCard += `\nitem1.URL;type=pref:${vcardData.linkedin}`;
+    vCard += `\nitem1.X-ABLabel:LinkedIn`;
+}
+
 
   const photoBase64 = await imageUrlToBase64(emp.photo);
   if (photoBase64) {
