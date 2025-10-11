@@ -3,14 +3,14 @@ const vcardData = {
     firstName: 'Samantha',
     lastName: 'Lee',
     fullName: 'Samantha Lee',
-    title: 'Software Developer',
+    title: 'Technology Development Manager',
     email: 'samantha@pollisum.com',
     phone: '+65 91377584',
     website: 'https://pollisum.com',
     address: 'Singapore',
     // Profile picture URL (optional - leave empty string if no photo)
     // Upload your image to GitHub and use the raw URL
-    photoUrl: 'https://github.com/doudouey-svg/PollisumDigitalCard/blob/main/assets/Samantha.jpeg',
+    photoUrl: 'https://raw.githubusercontent.com/doudouey-svg/PollisumDigitalCard/main/assets/Samantha.jpeg',
     // Social Media (optional)
     linkedin: 'https://www.linkedin.com/company/pollisum-engineering-pte-ltd',
 };
