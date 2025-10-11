@@ -2,11 +2,18 @@ let currentEmployee = null;
 
 async function loadEmployee() {
   const params = new URLSearchParams(window.location.search);
-  const employeeId = params.get('id') || 'samantha'; // default
+  const token = params.get('id'); // Now expects a token
+  
+  if (!token) {
+    document.body.innerHTML = `<h2>Invalid access</h2>`;
+    return;
+  }
   
   const response = await fetch('employees.json');
   const employees = await response.json();
-  const emp = employees.find(e => e.id === employeeId);
+  
+  // Find employee by token instead of id
+  const emp = employees.find(e => e.token === token);
   
   if (!emp) {
     document.body.innerHTML = `<h2>Employee not found</h2>`;
@@ -65,52 +72,6 @@ async function loadEmployee() {
   } else {
     instagramBtn.style.display = 'none';
   }
-}
-
-// Download vCard function
-function downloadVCard() {
-  if (!currentEmployee) return;
-  
-  const emp = currentEmployee;
-  const [firstName, ...lastNameParts] = emp.name.split(' ');
-  const lastName = lastNameParts.join(' ');
-  
-  let vCard = `BEGIN:VCARD
-VERSION:3.0
-FN:${emp.name}
-N:${lastName};${firstName};;;
-TITLE:${emp.title}
-EMAIL:${emp.email}
-TEL:${emp.phone}
-URL:${emp.website}
-ADR;TYPE=WORK:;;${emp.location};;;;`;
-
-  // Add personal LinkedIn to vCard if exists
-  if (emp.personalLinkedIn) {
-    vCard += `\nURL;TYPE=LinkedIn:${emp.personalLinkedIn}`;
-  }
-
-  // Add photo URL if provided
-  if (emp.photo) {
-    const photoUrl = `${window.location.origin}/${window.location.pathname.replace('index.html', '')}${emp.photo}`;
-    vCard += `\nPHOTO;VALUE=URL;TYPE=JPEG:${photoUrl}`;
-  }
-
-  // Add Google Maps URL
-  vCard += `\nNOTE:Location: https://www.google.com/maps/place/Pollisum+Engineering+Pte+Ltd/@1.4697222,103.8085362,17z/`;
-
-  vCard += `\nEND:VCARD`;
-
-  // Create blob and download
-  const blob = new Blob([vCard], { type: 'text/vcard' });
-  const url = window.URL.createObjectURL(blob);
-  const link = document.createElement('a');
-  link.href = url;
-  link.download = `${emp.name.replace(/ /g, '_')}.vcf`;
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
-  window.URL.revokeObjectURL(url);
 }
 
 document.addEventListener('DOMContentLoaded', loadEmployee);
