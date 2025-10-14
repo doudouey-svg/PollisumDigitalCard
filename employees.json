@@ -29,4 +29,19 @@
     "facebook": "https://www.facebook.com/Pollisum/",
     "instagram": "https://www.instagram.com/pollisumgroup/"
   }
+  {
+    "id": "Operator",
+    "token": "operator",
+    "name": "CHONG THIAM YUE",
+    "title": "CRAWLER CRANE OPERATOR",
+    "email": "",
+    "phone": "",
+    "website": "https://pollisum.com",
+    "location": "41 Senoko Way, Singapore 758053",
+    "photo": "",
+    "personalLinkedIn": "",
+    "linkedin": "https://www.linkedin.com/company/pollisum-engineering-pte-ltd",
+    "facebook": "https://www.facebook.com/Pollisum/",
+    "instagram": "https://www.instagram.com/pollisumgroup/"
+  }
 ]
