@@ -13,8 +13,23 @@
     "linkedin": "https://www.linkedin.com/company/pollisum-engineering-pte-ltd",
     "facebook": "https://www.facebook.com/Pollisum/",
     "instagram": "https://www.instagram.com/pollisumgroup/"
-  },
-  {
+    },
+    {
+    "id": "yangmei",
+    "token": "ET4BnxgvYHGkxq6",
+    "name": "Yang Mei",
+    "title": "CFO",
+    "email": "yangmei@pollisum.com",
+    "phone": "+65 92273110",
+    "website": "https://pollisum.com",
+    "location": "41 Senoko Way, Singapore 758053",
+    "photo": "assets/pictures/Yangmei.jpg",
+    "personalLinkedIn": "https://www.linkedin.com/in/yang-mei-18206077/",
+    "linkedin": "https://www.linkedin.com/company/pollisum-engineering-pte-ltd",
+    "facebook": "https://www.facebook.com/Pollisum/",
+    "instagram": "https://www.instagram.com/pollisumgroup/"
+    },
+    {
     "id": "samantha",
     "token": "W5xmhDtB80B4TBF",
     "name": "Samantha Lee",
