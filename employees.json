@@ -1,4 +1,19 @@
 [
+    {
+    "id": "chris",
+    "token": "9eFYCL8BAdRfsos",
+    "name": "Chris Ang",
+    "title": "CEO",
+    "email": "chris@pollisum.com",
+    "phone": "+65 91778173",
+    "website": "https://pollisum.com",
+    "location": "41 Senoko Way, Singapore 758053",
+    "photo": "assets/pictures/Chris.jpeg",
+    "personalLinkedIn": "https://www.linkedin.com/in/chrispollisum/",
+    "linkedin": "https://www.linkedin.com/company/pollisum-engineering-pte-ltd",
+    "facebook": "https://www.facebook.com/Pollisum/",
+    "instagram": "https://www.instagram.com/pollisumgroup/"
+  }
   {
     "id": "samantha",
     "token": "W5xmhDtB80B4TBF",
@@ -8,7 +23,7 @@
     "phone": "+65 91377584",
     "website": "https://pollisum.com",
     "location": "41 Senoko Way, Singapore 758053",
-    "photo": "assets/Samantha.jpeg",
+    "photo": "assets/pictures/Samantha.jpeg",
     "personalLinkedIn": "https://www.linkedin.com/in/pollisum-samantha/",
     "linkedin": "https://www.linkedin.com/company/pollisum-engineering-pte-ltd",
     "facebook": "https://www.facebook.com/Pollisum/",
@@ -23,7 +38,7 @@
     "phone": "+65 90933711",
     "website": "https://pollisum.com",
     "location": "41 Senoko Way, Singapore 758053",
-    "photo": "assets/cannie_1.JPG",
+    "photo": "assets/pictures/cannie_1.JPG",
     "personalLinkedIn": "https://www.linkedin.com/in/cannie-lau-a7914762/",
     "linkedin": "https://www.linkedin.com/company/pollisum-engineering-pte-ltd",
     "facebook": "https://www.facebook.com/Pollisum/",
