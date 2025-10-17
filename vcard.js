@@ -44,9 +44,14 @@ async function downloadVCard() {
 VERSION:3.0
 FN:${emp.name}
 N:${emp.name.split(' ').slice(-1)[0]};${emp.name.split(' ')[0]};;;
-TITLE:${emp.title}
-EMAIL;TYPE=WORK:${emp.email}
-TEL;TYPE=WORK,VOICE:${emp.phone}
+TITLE:${emp.title}`;
+
+  // Add email only if it exists
+  if (emp.email) {
+    vCard += `\nEMAIL;TYPE=WORK:${emp.email}`;
+  }
+
+  vCard += `\nTEL;TYPE=WORK,VOICE:${emp.phone}
 URL;TYPE=WORK:${emp.website}
 ADR;TYPE=WORK:;;${emp.location};;;;`;
 
