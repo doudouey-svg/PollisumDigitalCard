@@ -23,11 +23,23 @@ async function loadEmployee() {
   // Store current employee for vCard generation
   currentEmployee = emp;
 
-  document.querySelector('.profile-img').src = emp.photo;
+  // Profile picture - use default if not provided
+  const profileImg = document.querySelector('.profile-img');
+  profileImg.src = emp.photo || 'assets/default-profile.png';
+
   document.querySelector('.name').textContent = emp.name;
   document.querySelector('.title').textContent = emp.title;
-  document.querySelector('.info-value a[href^="mailto"]').textContent = emp.email;
-  document.querySelector('.info-value a[href^="mailto"]').href = `mailto:${emp.email}`;
+
+  // Email - hide if blank
+  const emailItem = document.getElementById('email-item');
+  if (emp.email) {
+    emailItem.style.display = 'flex';
+    document.querySelector('.info-value a[href^="mailto"]').textContent = emp.email;
+    document.querySelector('.info-value a[href^="mailto"]').href = `mailto:${emp.email}`;
+  } else {
+    emailItem.style.display = 'none';
+  }
+
   document.querySelector('.info-value a[href^="tel"]').textContent = emp.phone;
   document.querySelector('.info-value a[href^="tel"]').href = `tel:${emp.phone}`;
   document.querySelector('.info-value a[href^="https"]').textContent = new URL(emp.website).hostname;
