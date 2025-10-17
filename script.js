@@ -25,7 +25,7 @@ async function loadEmployee() {
 
   // Profile picture - use default if not provided
   const profileImg = document.querySelector('.profile-img');
-  profileImg.src = emp.photo || 'assets/default-profile.png';
+  profileImg.src = emp.photo || 'assets/pictures/default-profile.png';
 
   document.querySelector('.name').textContent = emp.name;
   document.querySelector('.title').textContent = emp.title;
