@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee CSV to JSON Converter</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #ef4444;
+            margin-bottom: 20px;
+        }
+        textarea {
+            width: 100%;
+            height: 300px;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-family: monospace;
+            font-size: 13px;
+            margin-bottom: 20px;
+        }
+        button {
+            background: #ef4444;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-right: 10px;
+        }
+        button:hover {
+            background: #dc2626;
+        }
+        .success {
+            background: #10b981;
+        }
+        .success:hover {
+            background: #059669;
+        }
+        .output {
+            background: #f9fafb;
+            padding: 20px;
+            border-radius: 8px;
+            border: 2px solid #e0e0e0;
+            margin-top: 20px;
+            max-height: 500px;
+            overflow-y: auto;
+        }
+        pre {
+            margin: 0;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            font-size: 12px;
+        }
+        .instructions {
+            background: #fff5f5;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #ef4444;
+            margin-bottom: 20px;
+        }
+        .stats {
+            background: #f0fdf4;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-left: 4px solid #10b981;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📋 Employee CSV to JSON Converter</h1>
+        
+        <div class="instructions">
+            <strong>Instructions:</strong>
+            <ol>
+                <li>Copy all data from your Excel/CSV file (including headers)</li>
+                <li>Paste it in the text area below</li>
+                <li>Click "Convert to JSON"</li>
+                <li>Copy the generated JSON and save as <code>employees.json</code></li>
+            </ol>
+            <p><strong>Expected columns:</strong> id, token, name, title, email, phone, website, location, photo, personalLinkedIn, linkedin, facebook, instagram</p>
+        </div>
+
+        <div class="stats" id="stats" style="display: none;">
+            <strong>✅ Conversion Complete!</strong><br>
+            <span id="stats-text"></span>
+        </div>
+
+        <label for="csv-input"><strong>Paste your CSV data here:</strong></label>
+        <textarea id="csv-input" placeholder="id	token	name	title	email	phone	website	location	photo	personalLinkedIn	linkedin	facebook	instagram
+emp1	6VllcCakBLZuhay	Ang Ka San	Founder	ksang@pollisum.com	+65 98188377	..."></textarea>
+
+        <button onclick="convertToJSON()">🔄 Convert to JSON</button>
+        <button class="success" onclick="downloadJSON()" id="download-btn" style="display: none;">⬇️ Download employees.json</button>
+        <button onclick="copyToClipboard()" id="copy-btn" style="display: none;">📋 Copy to Clipboard</button>
+
+        <div class="output" id="output" style="display: none;">
+            <pre id="json-output"></pre>
+        </div>
+    </div>
+
+    <script>
+        let jsonData = null;
+
+        function convertToJSON() {
+            const input = document.getElementById('csv-input').value.trim();
+            
+            if (!input) {
+                alert('Please paste your CSV data first!');
+                return;
+            }
+
+            try {
+                // Split by lines
+                const lines = input.split('\n').filter(line => line.trim());
+                
+                // Get headers from first line (split by tab or comma)
+                const headerLine = lines[0];
+                const delimiter = headerLine.includes('\t') ? '\t' : ',';
+                const headers = headerLine.split(delimiter).map(h => h.trim());
+
+                // Process data rows
+                const employees = [];
+                for (let i = 1; i < lines.length; i++) {
+                    const values = lines[i].split(delimiter);
+                    
+                    const employee = {
+                        id: values[0] ? values[0].trim() : `emp-${i}`,
+                        token: values[1] ? values[1].trim() : generateToken(),
+                        name: values[2] || '',
+                        title: values[3] || '',
+                        email: values[4] || '',
+                        phone: values[5] || '',
+                        website: values[6] || 'https://www.pollisum.com',
+                        location: values[7] || '41 Senoko Way, Singapore 758053',
+                        photo: values[8] || '',
+                        personalLinkedIn: values[9] || '',
+                        linkedin: values[10] || 'https://www.linkedin.com/company/pollisum-engineering-pte-ltd',
+                        facebook: values[11] || 'https://www.facebook.com/Pollisum/',
+                        instagram: values[12] || 'https://www.instagram.com/pollisumgroup/'
+                    };
+
+                    employees.push(employee);
+                }
+
+                jsonData = employees;
+                const jsonString = JSON.stringify(employees, null, 2);
+                
+                document.getElementById('json-output').textContent = jsonString;
+                document.getElementById('output').style.display = 'block';
+                document.getElementById('download-btn').style.display = 'inline-block';
+                document.getElementById('copy-btn').style.display = 'inline-block';
+                
+                // Show stats
+                document.getElementById('stats').style.display = 'block';
+                document.getElementById('stats-text').textContent = `Converted ${employees.length} employees successfully!`;
+                
+            } catch (error) {
+                alert('Error converting data: ' + error.message);
+                console.error(error);
+            }
+        }
+
+        function generateToken() {
+            return Array.from({length: 15}, () => 
+                'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'[Math.floor(Math.random() * 62)]
+            ).join('');
+        }
+
+        function downloadJSON() {
+            if (!jsonData) return;
+            
+            const blob = new Blob([JSON.stringify(jsonData, null, 2)], { type: 'application/json' });
+            const url = window.URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = 'employees.json';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            window.URL.revokeObjectURL(url);
+        }
+
+        function copyToClipboard() {
+            const text = document.getElementById('json-output').textContent;
+            navigator.clipboard.writeText(text).then(() => {
+                alert('JSON copied to clipboard!');
+            }).catch(err => {
+                alert('Failed to copy: ' + err);
+            });
+        }
+    </script>
+</body>
+</html>
