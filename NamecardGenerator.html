@@ -86,6 +86,13 @@
             margin: 10px 0 5px 0;
             font-weight: 600;
         }
+        .banner-info {
+            background: #fef3c7;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            border-left: 4px solid #f59e0b;
+        }
     </style>
 </head>
 <body>
@@ -97,6 +104,15 @@
             
             <label>Upload Company Logo (PNG/JPG):</label>
             <input type="file" id="logo-upload" accept="image/*">
+            
+            <label>Upload Award Banner (PNG/JPG):</label>
+            <input type="file" id="banner-upload" accept="image/*">
+            <div class="banner-info">
+                <strong>📏 Recommended Banner Size:</strong><br>
+                • Width: 440px (will fit perfectly on card)<br>
+                • Height: 60-80px (optimal for card layout)<br>
+                • Format: PNG with transparent background preferred
+            </div>
             
             <label>Load Employee Data (employees.json):</label>
             <input type="file" id="json-upload" accept=".json">
@@ -118,11 +134,7 @@
     <script>
         let employees = [];
         let logoImage = null;
-        let awardImages = {
-            award1: null,
-            award2: null,
-            award3: null
-        };
+        let bannerImage = null;
         let generatedCards = [];
 
         // Load logo
@@ -140,34 +152,20 @@
             reader.readAsDataURL(file);
         });
 
-        // Load award images from GitHub
-        async function loadAwardImages() {
-            const awards = [
-                { key: 'award1', url: 'https://raw.githubusercontent.com/doudouey-svg/PollisumDigitalCard/main/assets/ST_SFGC_2025.jpg' },
-                { key: 'award2', url: 'https://raw.githubusercontent.com/doudouey-svg/PollisumDigitalCard/main/assets/FT_HGC_2025.png' },
-                { key: 'award3', url: 'https://raw.githubusercontent.com/doudouey-svg/PollisumDigitalCard/main/assets/GPTW.png' }
-            ];
-
-            for (const award of awards) {
-                try {
-                    const img = new Image();
-                    img.crossOrigin = 'anonymous';
-                    await new Promise((resolve, reject) => {
-                        img.onload = () => {
-                            awardImages[award.key] = img;
-                            resolve();
-                        };
-                        img.onerror = reject;
-                        img.src = award.url;
-                    });
-                } catch (error) {
-                    console.warn(`Failed to load ${award.key}:`, error);
-                }
-            }
-        }
-
-        // Load awards on page load
-        loadAwardImages();
+        // Load banner
+        document.getElementById('banner-upload').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                const img = new Image();
+                img.onload = function() {
+                    bannerImage = img;
+                    checkReady();
+                };
+                img.src = event.target.result;
+            };
+            reader.readAsDataURL(file);
+        });
 
         // Load JSON
         document.getElementById('json-upload').addEventListener('change', function(e) {
@@ -187,7 +185,11 @@
         function checkReady() {
             if (logoImage && employees.length > 0) {
                 document.getElementById('stats').style.display = 'block';
-                document.getElementById('stats-text').textContent = `Loaded ${employees.length} employees with logo`;
+                let statusText = `Loaded ${employees.length} employees with logo`;
+                if (bannerImage) {
+                    statusText += ` and award banner`;
+                }
+                document.getElementById('stats-text').textContent = statusText;
                 document.getElementById('preview-btn').style.display = 'inline-block';
                 document.getElementById('generate-btn').style.display = 'inline-block';
             }
@@ -230,7 +232,7 @@
 
             // Company Logo (top left, larger)
             if (logoImage) {
-                const logoHeight = 100; // Increased from 60
+                const logoHeight = 100;
                 const logoWidth = (logoImage.width / logoImage.height) * logoHeight;
                 ctx.drawImage(logoImage, 40, 40, logoWidth, logoHeight);
             }
@@ -295,40 +297,32 @@
             const website = employee.website.replace('https://', '').replace('http://', '');
             ctx.fillText('🌐 ' + website, 80, 720);
 
-            // Award logos at the bottom
-            if (awardImages.award1 || awardImages.award2 || awardImages.award3) {
-                const awardY = 780;
-                const awardHeight = 80;
-                const awardSpacing = 20;
+            // Award Banner (centered at bottom)
+            if (bannerImage) {
+                const bannerMaxWidth = 440; // Maximum width to fit nicely on card
+                const bannerMaxHeight = 80; // Maximum height
                 
-                // Calculate total width to center the awards
-                let awards = [awardImages.award1, awardImages.award2, awardImages.award3].filter(img => img !== null);
-                let totalWidth = 0;
-                awards.forEach(img => {
-                    const width = (img.width / img.height) * awardHeight;
-                    totalWidth += width;
-                });
-                totalWidth += (awards.length - 1) * awardSpacing;
+                // Calculate banner dimensions maintaining aspect ratio
+                let bannerWidth = bannerImage.width;
+                let bannerHeight = bannerImage.height;
                 
-                let currentX = (600 - totalWidth) / 2;
-                
-                // Draw each award
-                if (awardImages.award1) {
-                    const width1 = (awardImages.award1.width / awardImages.award1.height) * awardHeight;
-                    ctx.drawImage(awardImages.award1, currentX, awardY, width1, awardHeight);
-                    currentX += width1 + awardSpacing;
+                // Scale down if too wide
+                if (bannerWidth > bannerMaxWidth) {
+                    bannerHeight = (bannerHeight * bannerMaxWidth) / bannerWidth;
+                    bannerWidth = bannerMaxWidth;
                 }
                 
-                if (awardImages.award2) {
-                    const width2 = (awardImages.award2.width / awardImages.award2.height) * awardHeight;
-                    ctx.drawImage(awardImages.award2, currentX, awardY, width2, awardHeight);
-                    currentX += width2 + awardSpacing;
+                // Scale down if too tall
+                if (bannerHeight > bannerMaxHeight) {
+                    bannerWidth = (bannerWidth * bannerMaxHeight) / bannerHeight;
+                    bannerHeight = bannerMaxHeight;
                 }
                 
-                if (awardImages.award3) {
-                    const width3 = (awardImages.award3.width / awardImages.award3.height) * awardHeight;
-                    ctx.drawImage(awardImages.award3, currentX, awardY, width3, awardHeight);
-                }
+                // Center the banner horizontally
+                const bannerX = (600 - bannerWidth) / 2;
+                const bannerY = 780; // Position from top
+                
+                ctx.drawImage(bannerImage, bannerX, bannerY, bannerWidth, bannerHeight);
             }
 
             return canvas;
