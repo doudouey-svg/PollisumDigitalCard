@@ -109,7 +109,7 @@
             <label>Upload Award Banner (PNG/JPG):</label>
             <input type="file" id="banner-upload" accept="image/*">
             <div class="banner-info">
-                📏 <strong>Updated banner size:</strong> 520px width × 120px height (left-aligned, larger size)
+                📏 <strong>Recommended banner size:</strong> 430px width × 100px height (fits within namecard boundaries)
             </div>
             
             <label>Load Employee Data (employees.json):</label>
@@ -295,12 +295,32 @@
             const website = employee.website.replace('https://', '').replace('http://', '');
             ctx.fillText('🌐 ' + website, 80, 720);
 
-            // Award Banner (left-aligned with website, larger size)
+            // Award Banner (left-aligned, properly sized to fit within card boundaries)
             if (bannerImage) {
-                const bannerHeight = 120; // Increased from 80 to 120
-                const bannerWidth = 520; // Increased from 440 to 520
-                const bannerX = 80; // Left-aligned with website (same as website x position)
-                const bannerY = 750; // Positioned below website
+                // Calculate maximum dimensions that fit within the card
+                const cardMargin = 80; // Left margin
+                const rightMargin = 80; // Right margin for safety
+                const maxBannerWidth = 600 - cardMargin - rightMargin; // 440px max width
+                const maxBannerHeight = 100; // Reasonable height that fits
+                
+                // Calculate actual banner dimensions maintaining aspect ratio
+                let bannerWidth = bannerImage.width;
+                let bannerHeight = bannerImage.height;
+                
+                // Scale to fit within max width
+                if (bannerWidth > maxBannerWidth) {
+                    bannerHeight = (bannerHeight * maxBannerWidth) / bannerWidth;
+                    bannerWidth = maxBannerWidth;
+                }
+                
+                // Scale to fit within max height
+                if (bannerHeight > maxBannerHeight) {
+                    bannerWidth = (bannerWidth * maxBannerHeight) / bannerHeight;
+                    bannerHeight = maxBannerHeight;
+                }
+                
+                const bannerX = cardMargin; // Left-aligned with other text
+                const bannerY = 760; // Positioned below website with some spacing
                 
                 ctx.drawImage(bannerImage, bannerX, bannerY, bannerWidth, bannerHeight);
             }
