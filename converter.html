@@ -103,7 +103,7 @@
         </div>
 
         <label for="csv-input"><strong>Paste your CSV data here:</strong></label>
-        <textarea id="csv-input" placeholder="id	token	name	title	email	phone	website	location	photo	personalLinkedIn	linkedin	facebook	instagram
+        <textarea id="csv-input" placeholder="id	token	name	title	email	phone	website	location	photo	personalLinkedIn	linkedin	facebook	instagram	company
 emp1	6VllcCakBLZuhay	Ang Ka San	Founder	ksang@pollisum.com	+65 98188377	..."></textarea>
 
         <button onclick="convertToJSON()">🔄 Convert to JSON</button>
@@ -143,17 +143,18 @@ emp1	6VllcCakBLZuhay	Ang Ka San	Founder	ksang@pollisum.com	+65 98188377	..."></t
                     const employee = {
                         id: values[0] ? values[0].trim() : `emp-${i}`,
                         token: values[1] ? values[1].trim() : generateToken(),
-                        name: values[2] || '',
-                        title: values[3] || '',
-                        email: values[4] || '',
-                        phone: values[5] || '',
-                        website: values[6] || 'https://www.pollisum.com',
-                        location: values[7] || '41 Senoko Way, Singapore 758053',
-                        photo: values[8] || '',
-                        personalLinkedIn: values[9] || '',
-                        linkedin: values[10] || 'https://www.linkedin.com/company/pollisum-engineering-pte-ltd',
-                        facebook: values[11] || 'https://www.facebook.com/Pollisum/',
-                        instagram: values[12] || 'https://www.instagram.com/pollisumgroup/'
+                        name: values[2] ? values[2].trim() : '',
+                        title: values[3] ? values[3].trim() : '',
+                        email: values[4] ? values[4].trim() : '',
+                        phone: values[5] ? values[5].trim() : '',
+                        website: values[6] ? values[6].trim() : 'https://www.pollisum.com',
+                        location: values[7] ? values[7].trim() : '41 Senoko Way, Singapore 758053',
+                        photo: values[8] ? values[8].trim() : '',
+                        personalLinkedIn: values[9] ? values[9].trim() : '',
+                        linkedin: values[10] ? values[10].trim() : 'https://www.linkedin.com/company/pollisum-engineering-pte-ltd',
+                        facebook: values[11] ? values[11].trim() : 'https://www.facebook.com/Pollisum/',
+                        instagram: values[12] ? values[12].trim() : 'https://www.instagram.com/pollisumgroup/',
+                        company: values[13] ? values[13].trim() : 'Pollisum Engineering Pte Ltd'
                     };
 
                     employees.push(employee);
