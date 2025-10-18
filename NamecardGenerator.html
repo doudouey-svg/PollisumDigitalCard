@@ -215,8 +215,8 @@
 
         async function drawNameCard(employee) {
             const canvas = document.createElement('canvas');
-            canvas.width = 500;
-            canvas.height = 900;
+            canvas.width = 450;
+            canvas.height = 800;
             const ctx = canvas.getContext('2d');
 
             // Background
@@ -226,7 +226,7 @@
             // Red border
             ctx.strokeStyle = '#ef4444';
             ctx.lineWidth = 8;
-            ctx.strokeRect(4, 4, 592, 892);
+            ctx.strokeRect(4, 4, 442, 792);
 
             // Company Logo (top left, larger)
             if (logoImage) {
@@ -253,17 +253,17 @@
             ctx.fillStyle = '#1f2937';
             ctx.font = 'bold 36px "Segoe UI"';
             ctx.textAlign = 'center';
-            ctx.fillText(employee.name, 300, 430);
+            ctx.fillText(employee.name, 225, 380);
 
             // Title (centered)
             ctx.fillStyle = '#ef4444';
             ctx.font = '24px "Segoe UI"';
-            ctx.fillText(employee.title, 300, 470);
+            ctx.fillText(employee.title, 225, 415);
 
             // Phone (centered)
             ctx.fillStyle = '#4b5563';
             ctx.font = '20px "Segoe UI"';
-            ctx.fillText(employee.phone, 300, 510);
+            ctx.fillText(employee.phone, 225, 450);
 
             // Email (centered, only if exists)
             if (employee.email) {
@@ -297,8 +297,8 @@
 
             // Award logos at the bottom
             if (awardImages.award1 || awardImages.award2 || awardImages.award3) {
-                const awardY = 500;
-                const awardHeight = 80;
+                const awardY = 100;
+                const awardHeight = 60;
                 const awardSpacing = 5;
                 
                 // Calculate total width to center the awards
