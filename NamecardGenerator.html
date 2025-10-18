@@ -86,6 +86,13 @@
             margin: 10px 0 5px 0;
             font-weight: 600;
         }
+        .debug {
+            background: #fef3c7;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+            font-size: 12px;
+        }
     </style>
 </head>
 <body>
@@ -105,6 +112,8 @@
                 <strong>✅ Ready!</strong><br>
                 <span id="stats-text"></span>
             </div>
+            
+            <div class="debug" id="debug-info"></div>
             
             <button onclick="generatePreview()" id="preview-btn" style="display: none;">👁️ Preview First Card</button>
             <button class="success" onclick="generateAll()" id="generate-btn" style="display: none;">🎨 Generate All Cards</button>
@@ -148,6 +157,8 @@
                 { key: 'award3', url: 'https://raw.githubusercontent.com/doudouey-svg/PollisumDigitalCard/main/assets/GPTW.png' }
             ];
 
+            let debugInfo = 'Award Loading Status:<br>';
+            
             for (const award of awards) {
                 try {
                     const img = new Image();
@@ -155,15 +166,22 @@
                     await new Promise((resolve, reject) => {
                         img.onload = () => {
                             awardImages[award.key] = img;
+                            debugInfo += `✅ ${award.key}: Loaded (${img.width}x${img.height})<br>`;
                             resolve();
                         };
-                        img.onerror = reject;
+                        img.onerror = (error) => {
+                            debugInfo += `❌ ${award.key}: Failed to load<br>`;
+                            reject(error);
+                        };
                         img.src = award.url;
                     });
                 } catch (error) {
+                    debugInfo += `❌ ${award.key}: Error - ${error.message}<br>`;
                     console.warn(`Failed to load ${award.key}:`, error);
                 }
             }
+            
+            document.getElementById('debug-info').innerHTML = debugInfo;
         }
 
         // Load awards on page load
@@ -215,7 +233,7 @@
 
         async function drawNameCard(employee) {
             const canvas = document.createElement('canvas');
-            canvas.width = 500; // Reduced from 600 to make it slimmer
+            canvas.width = 500;
             canvas.height = 900;
             const ctx = canvas.getContext('2d');
 
@@ -245,15 +263,15 @@
             });
 
             // QR Code (center)
-            const qrSize = 180; // Slightly reduced for slimmer canvas
+            const qrSize = 180;
             const qrX = (500 - qrSize) / 2;
             ctx.drawImage(qrImage, qrX, 180, qrSize, qrSize);
 
             // Name (below QR, centered)
             ctx.fillStyle = '#1f2937';
-            ctx.font = 'bold 32px "Segoe UI"'; // Slightly smaller for slimmer canvas
+            ctx.font = 'bold 32px "Segoe UI"';
             ctx.textAlign = 'center';
-            ctx.fillText(employee.name, 250, 420); // Adjusted x position for new width
+            ctx.fillText(employee.name, 250, 420);
 
             // Title (centered)
             ctx.fillStyle = '#ef4444';
@@ -295,22 +313,30 @@
             const website = employee.website.replace('https://', '').replace('http://', '');
             ctx.fillText('🌐 ' + website, 60, 650);
 
-            // Award Images (smaller size and closer spacing)
-            const awardY = 720; // Position for awards
-            const awardHeight = 50; // Reduced from default size
-            const awardSpacing = 10; // Reduced spacing between awards
-            let currentX = 60; // Starting position
-
-            // Draw each award image with smaller size and reduced spacing
-            Object.values(awardImages).forEach((awardImg, index) => {
-                if (awardImg) {
-                    const awardWidth = (awardImg.width / awardImg.height) * awardHeight;
-                    
-                    // Ensure we don't exceed canvas width
-                    if (currentX + awardWidth <= 440) {
-                        ctx.drawImage(awardImg, currentX, awardY, awardWidth, awardHeight);
-                        currentX += awardWidth + awardSpacing;
-                    }
+            // Award Images - Fixed implementation with better spacing and sizing
+            const awardY = 720;
+            const maxAwardHeight = 60; // Increased slightly for better visibility
+            const awardSpacing = 8; // Reduced spacing
+            let currentX = 60;
+            
+            // Get loaded awards and calculate total width needed
+            const loadedAwards = Object.values(awardImages).filter(img => img !== null);
+            console.log('Loaded awards count:', loadedAwards.length);
+            
+            // Calculate individual award widths
+            const awardWidths = loadedAwards.map(img => (img.width / img.height) * maxAwardHeight);
+            const totalWidth = awardWidths.reduce((sum, width) => sum + width, 0) + (awardSpacing * (loadedAwards.length - 1));
+            
+            // Center the awards horizontally
+            const startX = (500 - totalWidth) / 2;
+            currentX = startX;
+            
+            // Draw each award
+            loadedAwards.forEach((awardImg, index) => {
+                if (awardImg && currentX + awardWidths[index] <= 440) {
+                    ctx.drawImage(awardImg, currentX, awardY, awardWidths[index], maxAwardHeight);
+                    currentX += awardWidths[index] + awardSpacing;
+                    console.log(`Drew award ${index + 1} at position ${currentX - awardWidths[index] - awardSpacing}`);
                 }
             });
 
