@@ -50,7 +50,7 @@
             background: #059669;
         }
         .namecard {
-            width: 600px;
+            width: 500px;
             height: 900px;
             background: white;
             position: relative;
@@ -215,24 +215,24 @@
 
         async function drawNameCard(employee) {
             const canvas = document.createElement('canvas');
-            canvas.width = 450;
-            canvas.height = 800;
+            canvas.width = 500; // Reduced from 600 to make it slimmer
+            canvas.height = 900;
             const ctx = canvas.getContext('2d');
 
             // Background
             ctx.fillStyle = '#ffffff';
-            ctx.fillRect(0, 0, 600, 900);
+            ctx.fillRect(0, 0, 500, 900);
 
             // Red border
             ctx.strokeStyle = '#ef4444';
             ctx.lineWidth = 8;
-            ctx.strokeRect(4, 4, 442, 792);
+            ctx.strokeRect(4, 4, 492, 892);
 
             // Company Logo (top left, larger)
             if (logoImage) {
-                const logoHeight = 100; // Increased from 60
+                const logoHeight = 100;
                 const logoWidth = (logoImage.width / logoImage.height) * logoHeight;
-                ctx.drawImage(logoImage, 40, 40, logoWidth, logoHeight);
+                ctx.drawImage(logoImage, 30, 40, logoWidth, logoHeight);
             }
 
             // Generate QR Code
@@ -245,91 +245,74 @@
             });
 
             // QR Code (center)
-            const qrSize = 200;
-            const qrX = (600 - qrSize) / 2;
+            const qrSize = 180; // Slightly reduced for slimmer canvas
+            const qrX = (500 - qrSize) / 2;
             ctx.drawImage(qrImage, qrX, 180, qrSize, qrSize);
 
             // Name (below QR, centered)
             ctx.fillStyle = '#1f2937';
-            ctx.font = 'bold 36px "Segoe UI"';
+            ctx.font = 'bold 32px "Segoe UI"'; // Slightly smaller for slimmer canvas
             ctx.textAlign = 'center';
-            ctx.fillText(employee.name, 225, 380);
+            ctx.fillText(employee.name, 250, 420); // Adjusted x position for new width
 
             // Title (centered)
             ctx.fillStyle = '#ef4444';
-            ctx.font = '24px "Segoe UI"';
-            ctx.fillText(employee.title, 225, 415);
+            ctx.font = '22px "Segoe UI"';
+            ctx.fillText(employee.title, 250, 455);
 
             // Phone (centered)
             ctx.fillStyle = '#4b5563';
-            ctx.font = '20px "Segoe UI"';
-            ctx.fillText(employee.phone, 225, 450);
+            ctx.font = '18px "Segoe UI"';
+            ctx.fillText(employee.phone, 250, 485);
 
             // Email (centered, only if exists)
             if (employee.email) {
-                ctx.fillText(employee.email, 300, 540);
+                ctx.fillText(employee.email, 250, 510);
             }
 
             // Divider line
             ctx.strokeStyle = '#e5e7eb';
             ctx.lineWidth = 2;
             ctx.beginPath();
-            ctx.moveTo(80, 590);
-            ctx.lineTo(520, 590);
+            ctx.moveTo(60, 550);
+            ctx.lineTo(440, 550);
             ctx.stroke();
 
             // Company Name (left aligned, above location)
             ctx.textAlign = 'left';
             if (employee.company) {
                 ctx.fillStyle = '#374151';
-                ctx.font = 'bold 22px "Segoe UI"';
-                ctx.fillText(employee.company, 80, 640);
+                ctx.font = 'bold 20px "Segoe UI"';
+                ctx.fillText(employee.company, 60, 590);
             }
 
             // Location (left aligned)
             ctx.fillStyle = '#6b7280';
-            ctx.font = '18px "Segoe UI"';
-            ctx.fillText('📍 ' + employee.location, 80, 680);
+            ctx.font = '16px "Segoe UI"';
+            ctx.fillText('📍 ' + employee.location, 60, 620);
 
             // Website (left aligned)
             const website = employee.website.replace('https://', '').replace('http://', '');
-            ctx.fillText('🌐 ' + website, 80, 720);
+            ctx.fillText('🌐 ' + website, 60, 650);
 
-            // Award logos at the bottom
-            if (awardImages.award1 || awardImages.award2 || awardImages.award3) {
-                const awardY = 100;
-                const awardHeight = 60;
-                const awardSpacing = 5;
-                
-                // Calculate total width to center the awards
-                let awards = [awardImages.award1, awardImages.award2, awardImages.award3].filter(img => img !== null);
-                let totalWidth = 0;
-                awards.forEach(img => {
-                    const width = (img.width / img.height) * awardHeight;
-                    totalWidth += width;
-                });
-                totalWidth += (awards.length - 1) * awardSpacing;
-                
-                let currentX = (600 - totalWidth) / 2;
-                
-                // Draw each award
-                if (awardImages.award1) {
-                    const width1 = (awardImages.award1.width / awardImages.award1.height) * awardHeight;
-                    ctx.drawImage(awardImages.award1, currentX, awardY, width1, awardHeight);
-                    currentX += width1 + awardSpacing;
+            // Award Images (smaller size and closer spacing)
+            const awardY = 720; // Position for awards
+            const awardHeight = 50; // Reduced from default size
+            const awardSpacing = 10; // Reduced spacing between awards
+            let currentX = 60; // Starting position
+
+            // Draw each award image with smaller size and reduced spacing
+            Object.values(awardImages).forEach((awardImg, index) => {
+                if (awardImg) {
+                    const awardWidth = (awardImg.width / awardImg.height) * awardHeight;
+                    
+                    // Ensure we don't exceed canvas width
+                    if (currentX + awardWidth <= 440) {
+                        ctx.drawImage(awardImg, currentX, awardY, awardWidth, awardHeight);
+                        currentX += awardWidth + awardSpacing;
+                    }
                 }
-                
-                if (awardImages.award2) {
-                    const width2 = (awardImages.award2.width / awardImages.award2.height) * awardHeight;
-                    ctx.drawImage(awardImages.award2, currentX, awardY, width2, awardHeight);
-                    currentX += width2 + awardSpacing;
-                }
-                
-                if (awardImages.award3) {
-                    const width3 = (awardImages.award3.width / awardImages.award3.height) * awardHeight;
-                    ctx.drawImage(awardImages.award3, currentX, awardY, width3, awardHeight);
-                }
-            }
+            });
 
             return canvas;
         }
