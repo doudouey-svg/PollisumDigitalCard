@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Name Card Generator</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 1400px;
+            margin: 20px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #ef4444;
+            margin-bottom: 20px;
+        }
+        .controls {
+            background: #fff5f5;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            border-left: 4px solid #ef4444;
+        }
+        button {
+            background: #ef4444;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 5px;
+        }
+        button:hover {
+            background: #dc2626;
+        }
+        .success {
+            background: #10b981;
+        }
+        .success:hover {
+            background: #059669;
+        }
+        .namecard {
+            width: 600px;
+            height: 900px;
+            background: white;
+            position: relative;
+            margin: 20px auto;
+            border: 1px solid #ddd;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        canvas {
+            display: block;
+            margin: 20px auto;
+            border: 1px solid #ddd;
+        }
+        .preview-container {
+            max-height: 600px;
+            overflow-y: auto;
+            margin-top: 20px;
+        }
+        input[type="file"] {
+            margin: 10px 0;
+            padding: 10px;
+            border: 2px solid #e0e0e0;
+            border-radius: 5px;
+        }
+        .stats {
+            background: #f0fdf4;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            border-left: 4px solid #10b981;
+        }
+        label {
+            display: block;
+            margin: 10px 0 5px 0;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎴 Name Card Image Generator</h1>
+        
+        <div class="controls">
+            <h3>Setup</h3>
+            
+            <label>Upload Company Logo (PNG/JPG):</label>
+            <input type="file" id="logo-upload" accept="image/*">
+            
+            <label>Load Employee Data (employees.json):</label>
+            <input type="file" id="json-upload" accept=".json">
+            
+            <div class="stats" id="stats" style="display: none;">
+                <strong>✅ Ready!</strong><br>
+                <span id="stats-text"></span>
+            </div>
+            
+            <button onclick="generatePreview()" id="preview-btn" style="display: none;">👁️ Preview First Card</button>
+            <button class="success" onclick="generateAll()" id="generate-btn" style="display: none;">🎨 Generate All Cards</button>
+            <button onclick="downloadAll()" id="download-btn" style="display: none;">📥 Download All as ZIP</button>
+        </div>
+
+        <div class="preview-container" id="preview"></div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script>
+        let employees = [];
+        let logoImage = null;
+        let awardImages = {
+            award1: null,
+            award2: null,
+            award3: null
+        };
+        let generatedCards = [];
+
+        // Load logo
+        document.getElementById('logo-upload').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                const img = new Image();
+                img.onload = function() {
+                    logoImage = img;
+                    checkReady();
+                };
+                img.src = event.target.result;
+            };
+            reader.readAsDataURL(file);
+        });
+
+        // Load award images from GitHub
+        async function loadAwardImages() {
+            const awards = [
+                { key: 'award1', url: 'https://raw.githubusercontent.com/doudouey-svg/PollisumDigitalCard/main/assets/ST_SFGC_2025.jpg' },
+                { key: 'award2', url: 'https://raw.githubusercontent.com/doudouey-svg/PollisumDigitalCard/main/assets/FT_HGC_2025.png' },
+                { key: 'award3', url: 'https://raw.githubusercontent.com/doudouey-svg/PollisumDigitalCard/main/assets/GPTW.png' }
+            ];
+
+            for (const award of awards) {
+                try {
+                    const img = new Image();
+                    img.crossOrigin = 'anonymous';
+                    await new Promise((resolve, reject) => {
+                        img.onload = () => {
+                            awardImages[award.key] = img;
+                            resolve();
+                        };
+                        img.onerror = reject;
+                        img.src = award.url;
+                    });
+                } catch (error) {
+                    console.warn(`Failed to load ${award.key}:`, error);
+                }
+            }
+        }
+
+        // Load awards on page load
+        loadAwardImages();
+
+        // Load JSON
+        document.getElementById('json-upload').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                try {
+                    employees = JSON.parse(event.target.result);
+                    checkReady();
+                } catch (error) {
+                    alert('Error reading JSON file: ' + error.message);
+                }
+            };
+            reader.readAsText(file);
+        });
+
+        function checkReady() {
+            if (logoImage && employees.length > 0) {
+                document.getElementById('stats').style.display = 'block';
+                document.getElementById('stats-text').textContent = `Loaded ${employees.length} employees with logo`;
+                document.getElementById('preview-btn').style.display = 'inline-block';
+                document.getElementById('generate-btn').style.display = 'inline-block';
+            }
+        }
+
+        async function generateQRCode(url) {
+            return new Promise((resolve) => {
+                const container = document.createElement('div');
+                container.style.display = 'none';
+                document.body.appendChild(container);
+                
+                new QRCode(container, {
+                    text: url,
+                    width: 180,
+                    height: 180
+                });
+                
+                setTimeout(() => {
+                    const img = container.querySelector('img');
+                    resolve(img.src);
+                    document.body.removeChild(container);
+                }, 100);
+            });
+        }
+
+        async function drawNameCard(employee) {
+            const canvas = document.createElement('canvas');
+            canvas.width = 600;
+            canvas.height = 900;
+            const ctx = canvas.getContext('2d');
+
+            // Background
+            ctx.fillStyle = '#ffffff';
+            ctx.fillRect(0, 0, 600, 900);
+
+            // Red border
+            ctx.strokeStyle = '#ef4444';
+            ctx.lineWidth = 8;
+            ctx.strokeRect(4, 4, 592, 892);
+
+            // Company Logo (top left, larger)
+            if (logoImage) {
+                const logoHeight = 100; // Increased from 60
+                const logoWidth = (logoImage.width / logoImage.height) * logoHeight;
+                ctx.drawImage(logoImage, 40, 40, logoWidth, logoHeight);
+            }
+
+            // Generate QR Code
+            const qrUrl = `https://digitalcard.pollisum.com/?id=${employee.token}`;
+            const qrDataUrl = await generateQRCode(qrUrl);
+            const qrImage = new Image();
+            await new Promise((resolve) => {
+                qrImage.onload = resolve;
+                qrImage.src = qrDataUrl;
+            });
+
+            // QR Code (center)
+            const qrSize = 200;
+            const qrX = (600 - qrSize) / 2;
+            ctx.drawImage(qrImage, qrX, 180, qrSize, qrSize);
+
+            // Name (below QR, centered)
+            ctx.fillStyle = '#1f2937';
+            ctx.font = 'bold 36px "Segoe UI"';
+            ctx.textAlign = 'center';
+            ctx.fillText(employee.name, 300, 430);
+
+            // Title (centered)
+            ctx.fillStyle = '#ef4444';
+            ctx.font = '24px "Segoe UI"';
+            ctx.fillText(employee.title, 300, 470);
+
+            // Phone (centered)
+            ctx.fillStyle = '#4b5563';
+            ctx.font = '20px "Segoe UI"';
+            ctx.fillText(employee.phone, 300, 510);
+
+            // Email (centered, only if exists)
+            if (employee.email) {
+                ctx.fillText(employee.email, 300, 540);
+            }
+
+            // Divider line
+            ctx.strokeStyle = '#e5e7eb';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(80, 590);
+            ctx.lineTo(520, 590);
+            ctx.stroke();
+
+            // Company Name (left aligned, above location)
+            ctx.textAlign = 'left';
+            if (employee.company) {
+                ctx.fillStyle = '#374151';
+                ctx.font = 'bold 22px "Segoe UI"';
+                ctx.fillText(employee.company, 80, 640);
+            }
+
+            // Location (left aligned)
+            ctx.fillStyle = '#6b7280';
+            ctx.font = '18px "Segoe UI"';
+            ctx.fillText('📍 ' + employee.location, 80, 680);
+
+            // Website (left aligned)
+            const website = employee.website.replace('https://', '').replace('http://', '');
+            ctx.fillText('🌐 ' + website, 80, 720);
+
+            // Award logos at the bottom
+            if (awardImages.award1 || awardImages.award2 || awardImages.award3) {
+                const awardY = 780;
+                const awardHeight = 80;
+                const awardSpacing = 20;
+                
+                // Calculate total width to center the awards
+                let awards = [awardImages.award1, awardImages.award2, awardImages.award3].filter(img => img !== null);
+                let totalWidth = 0;
+                awards.forEach(img => {
+                    const width = (img.width / img.height) * awardHeight;
+                    totalWidth += width;
+                });
+                totalWidth += (awards.length - 1) * awardSpacing;
+                
+                let currentX = (600 - totalWidth) / 2;
+                
+                // Draw each award
+                if (awardImages.award1) {
+                    const width1 = (awardImages.award1.width / awardImages.award1.height) * awardHeight;
+                    ctx.drawImage(awardImages.award1, currentX, awardY, width1, awardHeight);
+                    currentX += width1 + awardSpacing;
+                }
+                
+                if (awardImages.award2) {
+                    const width2 = (awardImages.award2.width / awardImages.award2.height) * awardHeight;
+                    ctx.drawImage(awardImages.award2, currentX, awardY, width2, awardHeight);
+                    currentX += width2 + awardSpacing;
+                }
+                
+                if (awardImages.award3) {
+                    const width3 = (awardImages.award3.width / awardImages.award3.height) * awardHeight;
+                    ctx.drawImage(awardImages.award3, currentX, awardY, width3, awardHeight);
+                }
+            }
+
+            return canvas;
+        }
+
+        async function generatePreview() {
+            if (employees.length === 0) return;
+            
+            document.getElementById('preview').innerHTML = '<p>Generating preview...</p>';
+            
+            const canvas = await drawNameCard(employees[0]);
+            document.getElementById('preview').innerHTML = '<h3>Preview - ' + employees[0].name + '</h3>';
+            document.getElementById('preview').appendChild(canvas);
+        }
+
+        async function generateAll() {
+            generatedCards = [];
+            document.getElementById('preview').innerHTML = '<p>Generating all cards... This may take a while...</p>';
+            
+            for (let i = 0; i < employees.length; i++) {
+                const employee = employees[i];
+                const canvas = await drawNameCard(employee);
+                
+                // Convert to blob
+                const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png'));
+                generatedCards.push({
+                    name: employee.name.replace(/\s+/g, '_'),
+                    blob: blob
+                });
+                
+                // Update progress
+                document.getElementById('preview').innerHTML = `<p>Generated ${i + 1} of ${employees.length} cards...</p>`;
+            }
+            
+            document.getElementById('preview').innerHTML = `<p style="color: green;">✅ Generated ${generatedCards.length} name cards successfully!</p>`;
+            document.getElementById('download-btn').style.display = 'inline-block';
+        }
+
+        async function downloadAll() {
+            if (generatedCards.length === 0) return;
+            
+            const zip = new JSZip();
+            const folder = zip.folder('namecards');
+            
+            generatedCards.forEach(card => {
+                folder.file(`${card.name}.png`, card.blob);
+            });
+            
+            const content = await zip.generateAsync({type: 'blob'});
+            const url = window.URL.createObjectURL(content);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = 'pollisum_namecards.zip';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            window.URL.revokeObjectURL(url);
+        }
+    </script>
+</body>
+</html>
