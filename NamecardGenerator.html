@@ -215,7 +215,7 @@
 
         async function drawNameCard(employee) {
             const canvas = document.createElement('canvas');
-            canvas.width = 600;
+            canvas.width = 500;
             canvas.height = 900;
             const ctx = canvas.getContext('2d');
 
@@ -297,9 +297,9 @@
 
             // Award logos at the bottom
             if (awardImages.award1 || awardImages.award2 || awardImages.award3) {
-                const awardY = 780;
+                const awardY = 500;
                 const awardHeight = 80;
-                const awardSpacing = 20;
+                const awardSpacing = 5;
                 
                 // Calculate total width to center the awards
                 let awards = [awardImages.award1, awardImages.award2, awardImages.award3].filter(img => img !== null);
