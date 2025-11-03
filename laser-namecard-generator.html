@@ -233,9 +233,9 @@
             ctx.textAlign = 'center';
             ctx.fillText(employee.name, CARD_WIDTH / 2, 580 * scale);
 
-            // Title (centered, 20% larger)
+            // Title (centered, larger and BOLD for engraving)
             ctx.fillStyle = '#ef4444';
-            ctx.font = `${24 * scale}px "Segoe UI"`;
+            ctx.font = `bold ${28 * scale}px "Segoe UI"`;
             ctx.fillText(employee.title, CARD_WIDTH / 2, 620 * scale);
 
             // Divider line
@@ -246,21 +246,22 @@
             ctx.lineTo(CARD_WIDTH - 60 * scale, 670 * scale);
             ctx.stroke();
 
-            // Company Name (left aligned, 20% larger)
+            // Company Name (left aligned, larger and BOLD for engraving)
             ctx.textAlign = 'left';
             if (employee.company) {
                 ctx.fillStyle = '#374151';
-                ctx.font = `bold ${22 * scale}px "Segoe UI"`;
+                ctx.font = `bold ${26 * scale}px "Segoe UI"`;
                 ctx.fillText(employee.company, 60 * scale, 730 * scale);
             }
 
-            // Location (left aligned, 20% larger with more spacing)
+            // Location (left aligned, larger and BOLD for engraving)
             ctx.fillStyle = '#6b7280';
-            ctx.font = `${19 * scale}px "Segoe UI"`;
+            ctx.font = `bold ${22 * scale}px "Segoe UI"`;
             ctx.fillText('📍 ' + employee.location, 60 * scale, 780 * scale);
 
-            // Website (left aligned, 20% larger with more spacing)
+            // Website (left aligned, larger and BOLD for engraving)
             const website = employee.website.replace('https://', '').replace('http://', '');
+            ctx.font = `bold ${22 * scale}px "Segoe UI"`;
             ctx.fillText('🌐 ' + website, 60 * scale, 830 * scale);
 
             return canvas;
