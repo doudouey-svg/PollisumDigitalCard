@@ -221,29 +221,29 @@
                 qrImage.src = qrDataUrl;
             });
 
-            // QR Code (center, 20% larger)
+            // QR Code (center, 20% larger, more spacing from logo)
             const qrSize = 264 * scale;
             const qrX = (CARD_WIDTH - qrSize) / 2;
-            const qrY = 180 * scale;
+            const qrY = 230 * scale;
             ctx.drawImage(qrImage, qrX, qrY, qrSize, qrSize);
 
             // Name (below QR, centered, 20% larger)
             ctx.fillStyle = '#1f2937';
             ctx.font = `bold ${38 * scale}px "Segoe UI"`;
             ctx.textAlign = 'center';
-            ctx.fillText(employee.name, CARD_WIDTH / 2, 480 * scale);
+            ctx.fillText(employee.name, CARD_WIDTH / 2, 530 * scale);
 
             // Title (centered, 20% larger)
             ctx.fillStyle = '#ef4444';
             ctx.font = `${24 * scale}px "Segoe UI"`;
-            ctx.fillText(employee.title, CARD_WIDTH / 2, 520 * scale);
+            ctx.fillText(employee.title, CARD_WIDTH / 2, 570 * scale);
 
             // Divider line
             ctx.strokeStyle = '#e5e7eb';
             ctx.lineWidth = 2 * scale;
             ctx.beginPath();
-            ctx.moveTo(60 * scale, 570 * scale);
-            ctx.lineTo(CARD_WIDTH - 60 * scale, 570 * scale);
+            ctx.moveTo(60 * scale, 620 * scale);
+            ctx.lineTo(CARD_WIDTH - 60 * scale, 620 * scale);
             ctx.stroke();
 
             // Company Name (left aligned, 20% larger)
@@ -251,17 +251,17 @@
             if (employee.company) {
                 ctx.fillStyle = '#374151';
                 ctx.font = `bold ${22 * scale}px "Segoe UI"`;
-                ctx.fillText(employee.company, 60 * scale, 630 * scale);
+                ctx.fillText(employee.company, 60 * scale, 680 * scale);
             }
 
             // Location (left aligned, 20% larger with more spacing)
             ctx.fillStyle = '#6b7280';
             ctx.font = `${19 * scale}px "Segoe UI"`;
-            ctx.fillText('📍 ' + employee.location, 60 * scale, 680 * scale);
+            ctx.fillText('📍 ' + employee.location, 60 * scale, 730 * scale);
 
             // Website (left aligned, 20% larger with more spacing)
             const website = employee.website.replace('https://', '').replace('http://', '');
-            ctx.fillText('🌐 ' + website, 60 * scale, 730 * scale);
+            ctx.fillText('🌐 ' + website, 60 * scale, 780 * scale);
 
             return canvas;
         }
