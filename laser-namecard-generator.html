@@ -210,9 +210,9 @@
             ctx.lineWidth = 8 * scale;
             ctx.strokeRect(4 * scale, 4 * scale, CARD_WIDTH - 8 * scale, CARD_HEIGHT - 8 * scale);
 
-            // Company Logo (top left)
+            // Company Logo (top left, larger)
             if (logoImage) {
-                const logoHeight = 80 * scale;
+                const logoHeight = 100 * scale;
                 const logoWidth = (logoImage.width / logoImage.height) * logoHeight;
                 ctx.drawImage(logoImage, 30 * scale, 30 * scale, logoWidth, logoHeight);
             }
@@ -226,47 +226,47 @@
                 qrImage.src = qrDataUrl;
             });
 
-            // QR Code (center)
-            const qrSize = 180 * scale;
+            // QR Code (center, larger)
+            const qrSize = 220 * scale;
             const qrX = (CARD_WIDTH - qrSize) / 2;
-            const qrY = 140 * scale;
+            const qrY = 160 * scale;
             ctx.drawImage(qrImage, qrX, qrY, qrSize, qrSize);
 
-            // Name (below QR, centered)
+            // Name (below QR, centered, larger)
             ctx.fillStyle = '#1f2937';
-            ctx.font = `bold ${28 * scale}px "Segoe UI"`;
+            ctx.font = `bold ${32 * scale}px "Segoe UI"`;
             ctx.textAlign = 'center';
-            ctx.fillText(employee.name, CARD_WIDTH / 2, 360 * scale);
+            ctx.fillText(employee.name, CARD_WIDTH / 2, 420 * scale);
 
-            // Title (centered)
+            // Title (centered, larger)
             ctx.fillStyle = '#ef4444';
-            ctx.font = `${18 * scale}px "Segoe UI"`;
-            ctx.fillText(employee.title, CARD_WIDTH / 2, 390 * scale);
+            ctx.font = `${20 * scale}px "Segoe UI"`;
+            ctx.fillText(employee.title, CARD_WIDTH / 2, 455 * scale);
 
             // Divider line
             ctx.strokeStyle = '#e5e7eb';
             ctx.lineWidth = 2 * scale;
             ctx.beginPath();
-            ctx.moveTo(60 * scale, 430 * scale);
-            ctx.lineTo(CARD_WIDTH - 60 * scale, 430 * scale);
+            ctx.moveTo(60 * scale, 500 * scale);
+            ctx.lineTo(CARD_WIDTH - 60 * scale, 500 * scale);
             ctx.stroke();
 
-            // Company Name (left aligned)
+            // Company Name (left aligned, larger)
             ctx.textAlign = 'left';
             if (employee.company) {
                 ctx.fillStyle = '#374151';
-                ctx.font = `bold ${16 * scale}px "Segoe UI"`;
-                ctx.fillText(employee.company, 60 * scale, 470 * scale);
+                ctx.font = `bold ${18 * scale}px "Segoe UI"`;
+                ctx.fillText(employee.company, 60 * scale, 550 * scale);
             }
 
-            // Location (left aligned)
+            // Location (left aligned, larger with more spacing)
             ctx.fillStyle = '#6b7280';
-            ctx.font = `${14 * scale}px "Segoe UI"`;
-            ctx.fillText('📍 ' + employee.location, 60 * scale, 500 * scale);
+            ctx.font = `${16 * scale}px "Segoe UI"`;
+            ctx.fillText('📍 ' + employee.location, 60 * scale, 590 * scale);
 
-            // Website (left aligned)
+            // Website (left aligned, larger with more spacing)
             const website = employee.website.replace('https://', '').replace('http://', '');
-            ctx.fillText('🌐 ' + website, 60 * scale, 530 * scale);
+            ctx.fillText('🌐 ' + website, 60 * scale, 630 * scale);
 
             return canvas;
         }
