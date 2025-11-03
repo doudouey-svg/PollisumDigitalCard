@@ -205,14 +205,9 @@
             ctx.fillStyle = '#ffffff';
             ctx.fillRect(0, 0, CARD_WIDTH, CARD_HEIGHT);
 
-            // Red border
-            ctx.strokeStyle = '#ef4444';
-            ctx.lineWidth = 8 * scale;
-            ctx.strokeRect(4 * scale, 4 * scale, CARD_WIDTH - 8 * scale, CARD_HEIGHT - 8 * scale);
-
-            // Company Logo (top left, larger)
+            // Company Logo (top left, 20% larger)
             if (logoImage) {
-                const logoHeight = 100 * scale;
+                const logoHeight = 120 * scale;
                 const logoWidth = (logoImage.width / logoImage.height) * logoHeight;
                 ctx.drawImage(logoImage, 30 * scale, 30 * scale, logoWidth, logoHeight);
             }
@@ -226,47 +221,47 @@
                 qrImage.src = qrDataUrl;
             });
 
-            // QR Code (center, larger)
-            const qrSize = 220 * scale;
+            // QR Code (center, 20% larger)
+            const qrSize = 264 * scale;
             const qrX = (CARD_WIDTH - qrSize) / 2;
-            const qrY = 160 * scale;
+            const qrY = 180 * scale;
             ctx.drawImage(qrImage, qrX, qrY, qrSize, qrSize);
 
-            // Name (below QR, centered, larger)
+            // Name (below QR, centered, 20% larger)
             ctx.fillStyle = '#1f2937';
-            ctx.font = `bold ${32 * scale}px "Segoe UI"`;
+            ctx.font = `bold ${38 * scale}px "Segoe UI"`;
             ctx.textAlign = 'center';
-            ctx.fillText(employee.name, CARD_WIDTH / 2, 420 * scale);
+            ctx.fillText(employee.name, CARD_WIDTH / 2, 480 * scale);
 
-            // Title (centered, larger)
+            // Title (centered, 20% larger)
             ctx.fillStyle = '#ef4444';
-            ctx.font = `${20 * scale}px "Segoe UI"`;
-            ctx.fillText(employee.title, CARD_WIDTH / 2, 455 * scale);
+            ctx.font = `${24 * scale}px "Segoe UI"`;
+            ctx.fillText(employee.title, CARD_WIDTH / 2, 520 * scale);
 
             // Divider line
             ctx.strokeStyle = '#e5e7eb';
             ctx.lineWidth = 2 * scale;
             ctx.beginPath();
-            ctx.moveTo(60 * scale, 500 * scale);
-            ctx.lineTo(CARD_WIDTH - 60 * scale, 500 * scale);
+            ctx.moveTo(60 * scale, 570 * scale);
+            ctx.lineTo(CARD_WIDTH - 60 * scale, 570 * scale);
             ctx.stroke();
 
-            // Company Name (left aligned, larger)
+            // Company Name (left aligned, 20% larger)
             ctx.textAlign = 'left';
             if (employee.company) {
                 ctx.fillStyle = '#374151';
-                ctx.font = `bold ${18 * scale}px "Segoe UI"`;
-                ctx.fillText(employee.company, 60 * scale, 550 * scale);
+                ctx.font = `bold ${22 * scale}px "Segoe UI"`;
+                ctx.fillText(employee.company, 60 * scale, 630 * scale);
             }
 
-            // Location (left aligned, larger with more spacing)
+            // Location (left aligned, 20% larger with more spacing)
             ctx.fillStyle = '#6b7280';
-            ctx.font = `${16 * scale}px "Segoe UI"`;
-            ctx.fillText('📍 ' + employee.location, 60 * scale, 590 * scale);
+            ctx.font = `${19 * scale}px "Segoe UI"`;
+            ctx.fillText('📍 ' + employee.location, 60 * scale, 680 * scale);
 
-            // Website (left aligned, larger with more spacing)
+            // Website (left aligned, 20% larger with more spacing)
             const website = employee.website.replace('https://', '').replace('http://', '');
-            ctx.fillText('🌐 ' + website, 60 * scale, 630 * scale);
+            ctx.fillText('🌐 ' + website, 60 * scale, 730 * scale);
 
             return canvas;
         }
