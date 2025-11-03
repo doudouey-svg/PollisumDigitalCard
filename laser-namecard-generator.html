@@ -254,14 +254,14 @@
                 ctx.fillText(employee.company, 60 * scale, 730 * scale);
             }
 
-            // Location (left aligned, larger and BOLD for engraving)
+            // Location (left aligned, larger font and BOLD for engraving)
             ctx.fillStyle = '#6b7280';
-            ctx.font = `bold ${22 * scale}px "Segoe UI"`;
+            ctx.font = `bold ${24 * scale}px "Segoe UI"`;
             ctx.fillText('📍 ' + employee.location, 60 * scale, 780 * scale);
 
-            // Website (left aligned, larger and BOLD for engraving)
+            // Website (left aligned, larger font and BOLD for engraving)
             const website = employee.website.replace('https://', '').replace('http://', '');
-            ctx.font = `bold ${22 * scale}px "Segoe UI"`;
+            ctx.font = `bold ${24 * scale}px "Segoe UI"`;
             ctx.fillText('🌐 ' + website, 60 * scale, 830 * scale);
 
             return canvas;
