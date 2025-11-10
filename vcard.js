@@ -42,7 +42,7 @@ async function downloadVCard() {
 
   let vCard = `BEGIN:VCARD
 VERSION:3.0
-FN:${emp.name}
+FN:${emp.name} (Pollisum)
 N:${emp.name.split(' ').slice(-1)[0]} (Pollisum);${emp.name.split(' ')[0]};;;
 TITLE:${emp.title}`;
 
