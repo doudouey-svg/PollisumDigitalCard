@@ -43,7 +43,7 @@ async function downloadVCard() {
   let vCard = `BEGIN:VCARD
 VERSION:3.0
 FN:${emp.name}
-N:${emp.name.split(' ').slice(-1)[0]};${emp.name.split(' ')[0]};;;
+N:${emp.name.split(' ').slice(-1)[0]} (Pollisum);${emp.name.split(' ')[0]};;;
 TITLE:${emp.title}`;
 
   // Add email only if it exists
