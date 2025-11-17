@@ -5406,5 +5406,53 @@
     "facebook": "https://www.facebook.com/Pollisum/",
     "instagram": "https://www.instagram.com/pollisumgroup/",
     "company": "Pollisum Fabrication Pte Ltd"
+  },
+  {
+    "id": "G3189",
+    "token": "T6prEOl9X6JjA7u",
+    "name": "Tan Huey Fang",
+    "title": "Admin Associate",
+    "email": "hueyfang@pollisum.com",
+    "phone": "+65 93893129",
+    "website": "https://www.pollisum.com",
+    "location": "41 Senoko Way, Singapore 758053",
+    "photo": "assets/pictures/office/G3189.jpg",
+    "personalLinkedIn": "",
+    "linkedin": "https://www.linkedin.com/company/pollisum-engineering-pte-ltd",
+    "facebook": "https://www.facebook.com/Pollisum/",
+    "instagram": "https://www.instagram.com/pollisumgroup/",
+    "company": "Gim Sen Transportation Services"
+  },
+  {
+    "id": "G3204",
+    "token": "OL6ZSR58AQxbCB7",
+    "name": "Tan Chee Seng",
+    "title": "Admin Manager",
+    "email": "ronald@pollisum.com",
+    "phone": "+65 96178743",
+    "website": "https://www.pollisum.com",
+    "location": "41 Senoko Way, Singapore 758053",
+    "photo": "assets/pictures/office/G3204.jpg",
+    "personalLinkedIn": "",
+    "linkedin": "https://www.linkedin.com/company/pollisum-engineering-pte-ltd",
+    "facebook": "https://www.facebook.com/Pollisum/",
+    "instagram": "https://www.instagram.com/pollisumgroup/",
+    "company": "Gim Sen Transportation Services"
+  },
+  {
+    "id": "G3205",
+    "token": "5VvEjRO5ZHvpj3I",
+    "name": "Tan Siew Geck",
+    "title": "Senior Admin Associate",
+    "email": "siewgeck@pollisum.com",
+    "phone": "+65 97695362",
+    "website": "https://www.pollisum.com",
+    "location": "41 Senoko Way, Singapore 758053",
+    "photo": "assets/pictures/office/G3205.jpg",
+    "personalLinkedIn": "",
+    "linkedin": "https://www.linkedin.com/company/pollisum-engineering-pte-ltd",
+    "facebook": "https://www.facebook.com/Pollisum/",
+    "instagram": "https://www.instagram.com/pollisumgroup/",
+    "company": "Gim Sen Transportation Services"
   }
 ]
