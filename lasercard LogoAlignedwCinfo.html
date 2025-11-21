@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Laser Name Card Generator</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 1400px;
+            margin: 20px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #ef4444;
+            margin-bottom: 20px;
+        }
+        .controls {
+            background: #fff5f5;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            border-left: 4px solid #ef4444;
+        }
+        button {
+            background: #ef4444;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 5px;
+        }
+        button:hover {
+            background: #dc2626;
+        }
+        .success {
+            background: #10b981;
+        }
+        .success:hover {
+            background: #059669;
+        }
+        canvas {
+            display: block;
+            margin: 20px auto;
+            border: 1px solid #ddd;
+        }
+        .preview-container {
+            max-height: 600px;
+            overflow-y: auto;
+            margin-top: 20px;
+        }
+        input[type="file"] {
+            margin: 10px 0;
+            padding: 10px;
+            border: 2px solid #e0e0e0;
+            border-radius: 5px;
+        }
+        .stats {
+            background: #f0fdf4;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            border-left: 4px solid #10b981;
+        }
+        label {
+            display: block;
+            margin: 10px 0 5px 0;
+            font-weight: 600;
+        }
+        .info-box {
+            background: #dbeafe;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+            font-size: 14px;
+            border-left: 4px solid #3b82f6;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🖨️ Laser Name Card Generator</h1>
+        
+        <div class="controls">
+            <h3>Setup</h3>
+            
+            <div class="info-box">
+                📏 <strong>Card Size:</strong> 5.4cm × 8.4cm (203 × 317 pixels @ 96 DPI) - Credit card size for laser printing<br>
+                🏢 <strong>Logo:</strong> Automatically loaded from assets/cLogo.jpg
+            </div>
+            
+            <label>Load Employee Data (employees.json):</label>
+            <input type="file" id="json-upload" accept=".json">
+            
+            <div class="stats" id="stats" style="display: none;">
+                <strong>✅ Ready!</strong><br>
+                <span id="stats-text"></span>
+            </div>
+            
+            <button onclick="generatePreview()" id="preview-btn" style="display: none;">👁️ Preview First Card</button>
+            <button class="success" onclick="generateAll()" id="generate-btn" style="display: none;">🎨 Generate All Cards</button>
+            <button onclick="downloadAll()" id="download-btn" style="display: none;">📥 Download All as ZIP</button>
+        </div>
+
+        <div class="preview-container" id="preview"></div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script>
+        let employees = [];
+        let logoImage = null;
+        let generatedCards = [];
+
+        // Convert cm to pixels (at 300 DPI for print quality)
+        const DPI = 300;
+        const CM_TO_INCH = 0.393701;
+        const CARD_WIDTH = Math.round(5.4 * CM_TO_INCH * DPI);  // 5.4cm = 638px at 300dpi
+        const CARD_HEIGHT = Math.round(8.4 * CM_TO_INCH * DPI); // 8.4cm = 992px at 300dpi
+
+        // Load logo from GitHub automatically
+        function loadLogo() {
+            const img = new Image();
+            img.crossOrigin = 'anonymous';
+            img.onload = function() {
+                logoImage = img;
+                checkReady();
+            };
+            img.onerror = function() {
+                console.error('Failed to load logo from assets/cLogo.jpg');
+                alert('Warning: Could not load company logo from assets/cLogo.jpg');
+            };
+            img.src = 'assets/cLogo.jpg';
+        }
+
+        // Load logo on page load
+        loadLogo();
+
+        // Load JSON
+        document.getElementById('json-upload').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                try {
+                    employees = JSON.parse(event.target.result);
+                    checkReady();
+                } catch (error) {
+                    alert('Error reading JSON file: ' + error.message);
+                }
+            };
+            reader.readAsText(file);
+        });
+
+        function checkReady() {
+            if (logoImage && employees.length > 0) {
+                document.getElementById('stats').style.display = 'block';
+                document.getElementById('stats-text').textContent = `Loaded ${employees.length} employees with company logo`;
+                document.getElementById('preview-btn').style.display = 'inline-block';
+                document.getElementById('generate-btn').style.display = 'inline-block';
+            } else if (employees.length > 0 && !logoImage) {
+                document.getElementById('stats').style.display = 'block';
+                document.getElementById('stats-text').textContent = `Loaded ${employees.length} employees (waiting for logo to load)`;
+            }
+        }
+
+        async function generateQRCode(url) {
+            return new Promise((resolve) => {
+                const container = document.createElement('div');
+                container.style.display = 'none';
+                document.body.appendChild(container);
+                
+                new QRCode(container, {
+                    text: url,
+                    width: 400,
+                    height: 400
+                });
+                
+                setTimeout(() => {
+                    const img = container.querySelector('img');
+                    resolve(img.src);
+                    document.body.removeChild(container);
+                }, 100);
+            });
+        }
+
+        async function drawNameCard(employee) {
+            const canvas = document.createElement('canvas');
+            canvas.width = CARD_WIDTH;
+            canvas.height = CARD_HEIGHT;
+            const ctx = canvas.getContext('2d');
+
+            // Scale factor for all elements
+            const scale = CARD_WIDTH / 600;
+
+            // Background
+            ctx.fillStyle = '#ffffff';
+            ctx.fillRect(0, 0, CARD_WIDTH, CARD_HEIGHT);
+
+            // Company Logo (top left, aligned with company info text, 20% larger)
+            if (logoImage) {
+                const logoHeight = 120 * scale;
+                const logoWidth = (logoImage.width / logoImage.height) * logoHeight;
+                ctx.drawImage(logoImage, 60 * scale, 30 * scale, logoWidth, logoHeight);
+            }
+
+            // Generate QR Code
+            const qrUrl = `https://digitalcard.pollisum.com/?id=${employee.token}`;
+            const qrDataUrl = await generateQRCode(qrUrl);
+            const qrImage = new Image();
+            await new Promise((resolve) => {
+                qrImage.onload = resolve;
+                qrImage.src = qrDataUrl;
+            });
+
+            // QR Code (center, larger size, more spacing from logo)
+            const qrSize = 300 * scale;
+            const qrX = (CARD_WIDTH - qrSize) / 2;
+            const qrY = 230 * scale;
+            ctx.drawImage(qrImage, qrX, qrY, qrSize, qrSize);
+
+            // Name (below QR, centered, 20% larger, more spacing from QR)
+            ctx.fillStyle = '#1f2937';
+            ctx.font = `bold ${38 * scale}px "Segoe UI"`;
+            ctx.textAlign = 'center';
+            ctx.fillText(employee.name, CARD_WIDTH / 2, 580 * scale);
+
+            // Title (centered, larger and BOLD for engraving)
+            ctx.fillStyle = '#ef4444';
+            ctx.font = `bold ${30 * scale}px "Segoe UI"`;
+            ctx.fillText(employee.title, CARD_WIDTH / 2, 620 * scale);
+
+            // Divider line
+            ctx.strokeStyle = '#e5e7eb';
+            ctx.lineWidth = 2 * scale;
+            ctx.beginPath();
+            ctx.moveTo(60 * scale, 670 * scale);
+            ctx.lineTo(CARD_WIDTH - 60 * scale, 670 * scale);
+            ctx.stroke();
+
+            // Company Name (left aligned, larger and BOLD for engraving)
+            ctx.textAlign = 'left';
+            if (employee.company) {
+                ctx.fillStyle = '#374151';
+                ctx.font = `bold ${28 * scale}px "Segoe UI"`;
+                ctx.fillText(employee.company, 60 * scale, 730 * scale);
+            }
+
+            // Location (left aligned, larger font and BOLD for engraving)
+            ctx.fillStyle = '#6b7280';
+            ctx.font = `bold ${26 * scale}px "Segoe UI"`;
+            ctx.fillText('📍 ' + employee.location, 60 * scale, 780 * scale);
+
+            // Website (left aligned, larger font and BOLD for engraving)
+            const website = employee.website.replace('https://', '').replace('http://', '');
+            ctx.font = `bold ${26 * scale}px "Segoe UI"`;
+            ctx.fillText('🌐 ' + website, 60 * scale, 830 * scale);
+
+            return canvas;
+        }
+
+        async function generatePreview() {
+            if (employees.length === 0) return;
+            
+            document.getElementById('preview').innerHTML = '<p>Generating preview...</p>';
+            
+            const canvas = await drawNameCard(employees[0]);
+            document.getElementById('preview').innerHTML = '<h3>Preview - ' + employees[0].name + '</h3>';
+            document.getElementById('preview').appendChild(canvas);
+        }
+
+        async function generateAll() {
+            generatedCards = [];
+            document.getElementById('preview').innerHTML = '<p>Generating all cards... This may take a while...</p>';
+            
+            for (let i = 0; i < employees.length; i++) {
+                const employee = employees[i];
+                const canvas = await drawNameCard(employee);
+                
+                // Convert to blob at high quality
+                const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png', 1.0));
+                generatedCards.push({
+                    name: employee.name.replace(/\s+/g, '_'),
+                    blob: blob
+                });
+                
+                // Update progress
+                document.getElementById('preview').innerHTML = `<p>Generated ${i + 1} of ${employees.length} cards...</p>`;
+            }
+            
+            document.getElementById('preview').innerHTML = `<p style="color: green;">✅ Generated ${generatedCards.length} laser-ready name cards successfully!</p>`;
+            document.getElementById('download-btn').style.display = 'inline-block';
+        }
+
+        async function downloadAll() {
+            if (generatedCards.length === 0) return;
+            
+            const zip = new JSZip();
+            const folder = zip.folder('laser_namecards');
+            
+            generatedCards.forEach(card => {
+                folder.file(`${card.name}_laser.png`, card.blob);
+            });
+            
+            const content = await zip.generateAsync({type: 'blob'});
+            const url = window.URL.createObjectURL(content);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = 'pollisum_laser_namecards.zip';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            window.URL.revokeObjectURL(url);
+        }
+    </script>
+</body>
+</html>
